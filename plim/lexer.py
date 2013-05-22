@@ -336,7 +336,7 @@ def extract_quoted_attr_value(line):
             skip = 1
         # remove quotes from value
         value = line[skip:result - skip]
-        return value.decode('string_escape'), line[result:]
+        return value.encode('utf8').decode('string_escape'), line[result:]
     return None
 
 

@@ -16,4 +16,5 @@ else:
     
     as_unicode = unicode
     joined = lambda buf: as_unicode('').join(buf)
-    space_separated = lambda buf: as_unicode(' ').join(buf)
+    space_separated = lambda buf: as_unicode(' ').join([v.decode('utf8')
+                                                        for v in buf])
