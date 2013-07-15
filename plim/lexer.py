@@ -47,7 +47,7 @@ def kw_attribute(attr_name):
 %for __k, __v in {}.items():
 ${{__k}}=${{__v}}
 %endfor
-${{}}
+''
 '''.format(attr_name[2:]))
     return attribute
 
