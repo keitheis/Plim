@@ -41,6 +41,16 @@ ATTRIBUTE_VALUE_DELIMITER = '='
 BOOLEAN_ATTRIBUTE_MARKER = '?'
 LINE_BREAK = '\\'
 
+KEYWORD_ATTRIBUTES = '**'
+def kw_attribute(attr_name):
+    attribute = as_unicode('''
+%for __k, __v in {}.items():
+${{__k}}=${{__v}}
+%endfor
+${{}}
+'''.format(attr_name[2:]))
+    return attribute
+
 # Please note that in Plim all tag names are intentionally lower-cased
 TAG_RULE = '(?P<html_tag>[a-z][a-z0-9]*)'
 TAG_RE = re.compile(TAG_RULE)
@@ -410,9 +420,14 @@ def extract_tag_attribute(line, source, parentheses=False):
             return None
 
         elif parentheses and tail.startswith(ATTRIBUTES_DELIMITER) or tail.startswith(CLOSE_BRACE):
-            # attribute is presented in a form of boolean attribute
-            # which should be converted to attr="attr"
-            return as_unicode('{attr_name}="{attr_name}"').format(attr_name=attr_name), tail, source
+            if attr_name.startswith(KEYWORD_ATTRIBUTES):
+                # parsing keyword attributes (**kwattrs)
+                attribute = kw_attribute(attr_name)
+                return attribute, tail, source
+            else:
+                # attribute is presented in a form of boolean attribute
+                # which should be converted to attr="attr"
+                return as_unicode('{attr_name}="{attr_name}"').format(attr_name=attr_name), tail, source
         else:
             return None
     return None
