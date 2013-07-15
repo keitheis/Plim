@@ -45,7 +45,7 @@ KEYWORD_ATTRIBUTES = '**'
 def kw_attribute(attr_name):
     attribute = as_unicode('''
 %for __k, __v in {}.items():
-${{__k}}=${{__v}}
+${{__k}}="${{__v}}"
 %endfor
 ''
 '''.format(attr_name[2:]))
